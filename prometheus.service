@@ -11,6 +11,7 @@ ExecStart=docker run \
                   --name=prometheus \
                   -d \
                   --rm \
+                  -p 9090:9090 \
                   -v /efs/monitoring/prometheus/data/:/var/lib/prometheus/data/ \
                   -v /efs/monitoring/prometheus/etc/:/etc/prometheus/ \
                   -v /efs/monitoring/prometheus/log/:/var/log/prometheus/ \
