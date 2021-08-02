@@ -1,0 +1,24 @@
+[Unit]
+# $ docker run -d --gpus all --rm -p 9400:9400 nvcr.io/nvidia/k8s/dcgm-exporter:2.0.13-2.1.2-ubuntu18.04
+Description=Prometheus gpu node exporter
+Documentation=https://github.com/NVIDIA/gpu-monitoring-tools
+After=network-online.target
+
+[Service]
+User=root
+Restart=on-failure
+
+ExecStart= docker run \
+                  --name=dcgm-exporter \
+                  -d \
+                  --gpus all \
+                  --rm \
+                  -p 9400:9400 \
+                  --v /:/host:ro \
+                  docker://nvcr.io/nvidia/k8s/dcgm-exporter:2.0.13-2.1.2-ubuntu20.04
+[Install]
+WantedBy=multi-user.target
+
+# how to use
+# copy to /etc/systemd/system/dcgm-exporter.service
+# systemctl daemon-reload ;systemctl restart dcgm-exporter
