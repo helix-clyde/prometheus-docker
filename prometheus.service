@@ -14,7 +14,7 @@ ExecStart=docker run \
                   -v /efs/monitoring/prometheus/data/:/var/lib/prometheus/data/ \
                   -v /efs/monitoring/prometheus/etc/:/etc/prometheus/ \
                   -v /efs/monitoring/prometheus/log/:/var/log/prometheus/ \
-                  docker://quay.io/prometheus/prometheus:v2.28.1 \
+                  quay.io/prometheus/prometheus:v2.28.1 \
                       --config.file=/etc/prometheus/prometheus.yml \
                       --storage.tsdb.path="/var/lib/prometheus/data/"
 
