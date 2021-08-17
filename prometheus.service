@@ -9,12 +9,12 @@ Restart=on-failure
 
 ExecStart=docker run \
                   --name=prometheus \
-                  -d \
-                  --rm \
+                  -it \
+                  --restart unless-stopped \
                   -p 9090:9090 \
-                  -v /efs/monitoring/prometheus/data/:/var/lib/prometheus/data/ \
-                  -v /efs/monitoring/prometheus/etc/:/etc/prometheus/ \
-                  -v /efs/monitoring/prometheus/log/:/var/log/prometheus/ \
+                  -v /opt/prometheus/data/:/var/lib/prometheus/data/ \
+                  -v /opt/prometheus/etc/:/etc/prometheus/ \
+                  -v /opt/prometheus/log/:/var/log/prometheus/ \
                   quay.io/prometheus/prometheus:v2.28.1 \
                       --config.file=/etc/prometheus/prometheus.yml \
                       --storage.tsdb.path="/var/lib/prometheus/data/"
