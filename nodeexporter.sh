@@ -11,4 +11,6 @@ docker run \
   -d \
   -v /:/host:ro \
   quay.io/prometheus/node-exporter:${VERSION} \
-    --path.rootfs=/host
+    --path.rootfs=/host \
+    --collector.ntp \
+    --collector.supervisord
