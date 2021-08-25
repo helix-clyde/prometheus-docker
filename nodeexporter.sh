@@ -4,7 +4,7 @@ set -x
 
 export VERSION="v1.2.0"
 
-if [[ $(docker ps  | grep node-exporter | wc -l| tr -d ' ') -ne "1" ]]
+if [[ $(docker ps  | grep node-exporter | wc -l| tr -d ' ') -ne "1" ]] ; then
   docker run \
     --name node-exporter \
     --restart unless-stopped \
