@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
-
-export VERSION="v1.2.0"
+export VERSION="v1.2.2"
 
 if [[ $(docker ps  | grep node-exporter | wc -l| tr -d ' ') -ne "1" ]] ; then
   docker run \
