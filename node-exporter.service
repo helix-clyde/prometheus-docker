@@ -15,7 +15,7 @@ ExecStart= docker run \
                   -v "/proc:/host/proc:ro" \
                   -v "/sys:/host/sys:ro" \
                   -v "/:/rootfs:ro" \
-                  quay.io/prometheus/node-exporter:v1.2.0 \
+                  quay.io/prometheus/node-exporter:v1.2.2 \
                       --path.rootfs=/host
 [Install]
 WantedBy=multi-user.target

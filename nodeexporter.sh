@@ -2,7 +2,7 @@
 
 export VERSION="v1.2.2"
 
-if [[ $(docker ps  | grep -c node-exporter ) -ne "1" ]] ; then
+if [[ $(docker ps | grep -c node-exporter ) -ne "1" ]] ; then
   docker run \
     --name node-exporter \
     --restart unless-stopped \
