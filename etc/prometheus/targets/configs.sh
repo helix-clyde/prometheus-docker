@@ -9,9 +9,10 @@ NWMASK=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4 | cut -d . -
 for node in $(cat ~clyde.jones/nodes.txt | grep -v $MASTERNODE); do
   echo $node
   # if [[ $(curl -s --connect-timeout 1 --fail http://${node}:9100/metrics -o /dev/null) ]]; then
+  if [[ ! -e $TARGET_DIR/${node}.yml ]]; then
       /bin/cp -v $TARGET_DIR/node.yml.tmpl $TARGET_DIR/$node.yml \
       && sed -i -e "s/X.X.X.X/$node/" $TARGET_DIR/$node.yml
-  # fi
+  fi
 done
 
 cd $TARGET_DIR
