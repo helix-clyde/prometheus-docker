@@ -11,8 +11,8 @@ for host in $(qconf -sh | sort -R ); do
       -o ConnectTimeout=1 \
       $host \
        "sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
-       ; ~clyde.jones/bin/getip.sh \
-       ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh"\
+       ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh \
+       ; ~clyde.jones/bin/getip.sh" \
   ) \
    | grep 172\. \
    |tee -a ${NODELIST} \
