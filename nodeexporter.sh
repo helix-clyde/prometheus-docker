@@ -12,6 +12,7 @@ if [[ $(docker ps | grep -c node-exporter ) -ne "1" ]] ; then
     -p 9100:9100 \
     -d \
     -v /:/host:ro \
+    -v /efs/:/host/efs/:ro \
     quay.io/prometheus/node-exporter:${VERSION} \
       --path.rootfs=/host \
       --collector.ntp \
