@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
-set -x
+# set -x
 
-NOW=$(date +%Y%m)
+MIN=35
 
-# submit the main job
-#   use -terse for simpler output
-#       -V to export *ALL* env variables
-# for day in $(seq -w 30); do
-  for hour in $(seq -w 0 4 24) ; do
-    SUBTIME=${NOW}${day}${hour}
+mkdir -vp ~/logs/prometheus-docker/
+
+for future in $(seq 0 60); do
+  # echo -en "\n$future\t"
+  NOW=$(date +%Y%m%d -d "+$future day")
+  # echo $NOW
+  for hour in $(seq -w 0 6 23) ; do
+    SUBTIME=${NOW}${hour}${MIN}
+    echo $SUBTIME
       qsub \
-        -terse \
-        -V \
         -a ${SUBTIME} \
-        -N node_exporter \
-        -o ~/prometheus-docker/setup-${SUBTIME}.out \
-        -e ~/prometheus-docker/setup-${SUBTIME}.err \
-      < ~/prometheus-docker/setup.sh
-  done
-# done
+        -N node_exporter-$SUBTIME \
+        -o ~/logs/prometheus-docker/setup-${SUBTIME}.out \
+        -e ~/logs/prometheus-docker/setup-${SUBTIME}.err \
+      < ~/prometheus-docker/setups.sh
+  done 
+done

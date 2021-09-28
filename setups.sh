@@ -5,16 +5,6 @@
 NODELIST=~/nodes.txt
 rm -v $NODELIST
 
-# if [[ $(type -p parallel) ]]; then
-#   qconf -sh \
-#   | sort -R \
-#   | parallel --progress -j 10 ssh \
-#       -o StrictHostKeyChecking=false \
-#       -o ConnectTimeout=1 \
-#       $host \
-#        "sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
-#        ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh"
-# else
   for host in $(qconf -sh | sort -R ); do
     (ssh \
         -o StrictHostKeyChecking=false \
@@ -32,7 +22,6 @@ rm -v $NODELIST
      |tee -a ${NODELIST} \
 
   done
-# fi
 
 # sudo docker kill node-exporter; \
 # sudo docker rm node-exporter; \
