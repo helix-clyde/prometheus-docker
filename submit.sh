@@ -18,5 +18,5 @@ for future in $(seq 0 60); do
         -o ~/logs/prometheus-docker/setup-${SUBTIME}.out \
         -e ~/logs/prometheus-docker/setup-${SUBTIME}.err \
       < ~/prometheus-docker/setups.sh
-  done 
+  done
 done
