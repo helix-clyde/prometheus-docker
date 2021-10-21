@@ -1,20 +1,27 @@
 #!/usr/bin/env bash
 # set -x
+NODELIST=~/nodes.txt
+LOGDIR=~/logs/prometheus-docker/
 
-# MIN=35
+mkdir -vp $LOGDIR
 
-mkdir -vp ~/logs/prometheus-docker/
-
-# for future in $(seq 0 60); do
-#   NOW=$(date +%Y%m%d -d "+$future day")
-#   for hour in $(seq -w 0 6 23) ; do
-#     SUBTIME=${NOW}${hour}${MIN}
-#     echo $SUBTIME
-      qsub \
-#         -a ${SUBTIME} \
-        -N node_exporter-$SUBTIME \
-        -o ~/logs/prometheus-docker/setup-${SUBTIME}.out \
-        -e ~/logs/prometheus-docker/setup-${SUBTIME}.err \
-      < ~/prometheus-docker/setups.sh
-#   done 
-# done
+for (( i = 0; i < 12; i++ )); do
+  rm -v $NODELIST
+  for host in $(qconf -sh | sort -R ); do
+    (ssh \
+        -o StrictHostKeyChecking=false \
+        -o UserKnownHostsFile=/dev/null \
+        -o ConnectTimeout=1 \
+        $host \
+         "\
+         sudo docker kill node-exporter; \
+         sudo docker rm node-exporter; \
+         sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
+         ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh \
+         ; ~clyde.jones/bin/getip.sh" \
+    ) \
+     | grep 172\. \
+     |tee -a ${NODELIST}
+  done
+  sleep 1h
+done
