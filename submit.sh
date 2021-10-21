@@ -1,27 +1,22 @@
 #!/usr/bin/env bash
-# set -x
-NODELIST=~/nodes.txt
+set -x
+
 LOGDIR=~/logs/prometheus-docker/
 
 mkdir -vp $LOGDIR
 
 for (( i = 0; i < 12; i++ )); do
-  rm -v $NODELIST
+  echo $(date +%F)
   for host in $(qconf -sh | sort -R ); do
-    (ssh \
+    ssh \
         -o StrictHostKeyChecking=false \
         -o UserKnownHostsFile=/dev/null \
         -o ConnectTimeout=1 \
         $host \
-         "\
-         sudo docker kill node-exporter; \
-         sudo docker rm node-exporter; \
-         sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
-         ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh \
-         ; ~clyde.jones/bin/getip.sh" \
-    ) \
-     | grep 172\. \
-     |tee -a ${NODELIST}
+         " sudo docker kill node-exporter \
+         ; sudo docker rm node-exporter \
+         ; sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
+         ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh "
   done
   sleep 1h
 done
