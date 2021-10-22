@@ -5,7 +5,7 @@ LOGDIR=~/logs/prometheus-docker/
 
 mkdir -vp $LOGDIR
 
-for (( i = 0; i < 12; i++ )); do
+for (( i = 0; i < 48; i++ )); do
   echo $(date +%F)
   for host in $(qconf -sh | sort -R ); do
     ssh \
@@ -13,10 +13,11 @@ for (( i = 0; i < 12; i++ )); do
         -o UserKnownHostsFile=/dev/null \
         -o ConnectTimeout=1 \
         $host \
-         " sudo docker kill node-exporter \
-         ; sudo docker rm node-exporter \
-         ; sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
+         " sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
          ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh "
   done
   sleep 1h
 done
+
+# sudo docker kill node-exporter; \
+# sudo docker rm node-exporter; \
