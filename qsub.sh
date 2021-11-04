@@ -13,7 +13,13 @@ LOGDIR=/efs/home/clyde.jones/logs/prometheus-docker
 
 mkdir -vp $LOGDIR/
 
-JOB_ID = ""
+JOB_ID=$(qstat -t \
+         | grep node_ex \
+         | tr -s ' ' \
+         | cut -d ' ' -f 2 \
+         | sort -n \
+         | tail -n 1)
+
 for (( i = 0; i < 10; i++ )); do
   if [[ ${JOB_ID} == "" ]]; then
     JOB_ID=$(qsub \
