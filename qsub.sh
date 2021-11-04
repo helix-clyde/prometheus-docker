@@ -38,6 +38,14 @@ for (( i = 0; i < 10; i++ )); do
         -o $LOGDIR/prom-setup-$(date +%F-%H%M).out \
         -e $LOGDIR/prom-setup-$(date +%F-%H%M).err \
         < ~/prometheus-docker/setups.sh )
+    qsub \
+        -q ondemand.q \
+        -terse \
+        -N clean_${JOB_ID} \
+        -hold_jid $JOB_ID\
+        -o $LOGDIR/clean-$(date +%F-%H%M).out \
+        -e $LOGDIR/clean-$(date +%F-%H%M).err \
+        < ~/prometheus-docker/cleanup.sh
   fi
   echo $JOB_ID
 done
