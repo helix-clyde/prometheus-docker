@@ -5,7 +5,7 @@ LOGDIR=~/logs/prometheus-docker/
 
 mkdir -vp $LOGDIR
 
-for (( i = 0; i < 48; i++ )); do
+for (( i = 0; i < 47; i++ )); do
   echo $(date +%F-%H%M)
   for host in $(qconf -sh | sort -R ); do
     ssh \
