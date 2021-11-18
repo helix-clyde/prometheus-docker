@@ -20,4 +20,5 @@ docker run \
         -v ${PROM_BASE}/log/:/var/log/prometheus/ \
         quay.io/prometheus/prometheus:${VERSION} \
             --config.file=/etc/prometheus/prometheus.yml \
-            --storage.tsdb.path="/var/lib/prometheus/data/"
+            --storage.tsdb.path="/var/lib/prometheus/data/" \
+            --storage.tsdb.retention.time=5d
