@@ -23,4 +23,4 @@ docker run \
             --storage.tsdb.path="/var/lib/prometheus/data/" \
             --storage.tsdb.retention.time=14d \
             --storage.tsdb.wal-compression \
-            --storage.tsdb.retention.size=2G
+            --storage.tsdb.retention.size=2GB
