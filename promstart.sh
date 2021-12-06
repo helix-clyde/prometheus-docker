@@ -21,6 +21,6 @@ docker run \
         quay.io/prometheus/prometheus:${VERSION} \
             --config.file=/etc/prometheus/prometheus.yml \
             --storage.tsdb.path="/var/lib/prometheus/data/" \
-            --storage.tsdb.retention.time=14d \
+            --storage.tsdb.retention.time=7d \
             --storage.tsdb.wal-compression \
-            --storage.tsdb.retention.size=2.5GB
+            --storage.tsdb.retention.size=1GB
