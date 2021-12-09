@@ -1,10 +1,20 @@
 #!/usr/bin/env bash
 
-export VERSION="v1.3.1"
+VERSION="v1.3.1"
+CONTAINER_NAME="node-exporter"
 
-if [[ $(docker ps | grep -c node-exporter ) -ne "1" ]] ; then
+RUNNING_VERSION=$(docker ps --format 'table {{.Image}}' -f name=${CONTAINER_NAME} \
+                  | grep ${CONTAINER_NAME} \
+                  | cut -d : -f 2)
+
+if [[ ${RUNNING_VERSION} != ${VERSION} ]]; then
+  docker kill ${CONTAINER_NAME}
+  docker rm ${CONTAINER_NAME}
+fi
+
+if [[ -z ${RUNNING_VERSION} ]]; then
   docker run \
-    --name node-exporter \
+    --name ${CONTAINER_NAME} \
     --restart unless-stopped \
     --health-cmd='wget -q --spider http://localhost:9100/metrics' \
     --health-interval=30s \
@@ -13,7 +23,7 @@ if [[ $(docker ps | grep -c node-exporter ) -ne "1" ]] ; then
     -d \
     -v /:/host:ro \
     -v /efs/:/host/efs/:ro \
-    quay.io/prometheus/node-exporter:${VERSION} \
+    quay.io/prometheus/${CONTAINER_NAME}:${VERSION} \
       --path.rootfs=/host \
       --collector.ntp \
       --collector.supervisord
