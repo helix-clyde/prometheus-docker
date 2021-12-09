@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export VERSION="v1.2.2"
+export VERSION="v1.3.1"
 
 if [[ $(docker ps | grep -c node-exporter ) -ne "1" ]] ; then
   docker run \
