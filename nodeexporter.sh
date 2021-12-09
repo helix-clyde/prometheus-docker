@@ -7,12 +7,8 @@ RUNNING_VERSION=$(docker ps --format 'table {{.Image}}' -f name=${CONTAINER_NAME
                   | grep ${CONTAINER_NAME} \
                   | cut -d : -f 2)
 
-if [[ ${RUNNING_VERSION} != ${VERSION} ]]; then
-  docker kill ${CONTAINER_NAME}
-  docker rm ${CONTAINER_NAME}
-fi
-
-if [[ -z ${RUNNING_VERSION} ]]; then
+launch_container()
+{
   docker run \
     --name ${CONTAINER_NAME} \
     --restart unless-stopped \
@@ -27,4 +23,14 @@ if [[ -z ${RUNNING_VERSION} ]]; then
       --path.rootfs=/host \
       --collector.ntp \
       --collector.supervisord
+}
+
+if [[ ${RUNNING_VERSION} != ${VERSION} ]]; then
+  docker kill ${CONTAINER_NAME}
+  docker rm ${CONTAINER_NAME}
+  launch_container
+fi
+
+if [[ -z ${RUNNING_VERSION} ]]; then
+  launch_container
 fi
