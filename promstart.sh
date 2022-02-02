@@ -5,11 +5,14 @@
 PROM_BASE="/opt/prometheus"
 EFS_BASE="/efs/monitoring/prometheus"
 
-export VERSION="v2.31.1"
+export VERSION="v2.32.1"
 
 mkdir -vp ${EFS_BASE}/etc/ \
           ${PROM_BASE}/data/ \
           ${PROM_BASE}/log/
+sudo chown -c 65534.65534 \
+           ${PROM_BASE}/data/ \
+           ${PROM_BASE}/log/
 
 docker run \
         --name=prometheus \
