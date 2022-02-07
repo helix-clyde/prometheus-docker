@@ -10,6 +10,7 @@ set -x
 #   -e /efs/home/clyde.jones/logs/prometheus-docker/submits-$(date +%F).err < ~/prometheus-docker/submit.sh
 
 LOGDIR=/efs/home/clyde.jones/logs/prometheus-docker
+QUEUE=rxlod.q
 
 mkdir -vp $LOGDIR/
 
@@ -23,7 +24,7 @@ JOB_ID=$(qstat -t \
 for (( i = 0; i < 10; i++ )); do
   if [[ ${JOB_ID} == "" ]]; then
     JOB_ID=$(qsub \
-        -q ondemand.q \
+        -q $QUEUE \
         -terse \
         -N node_ex \
         -o $LOGDIR/prom-setup-$(date +%F-%H%M).out \
@@ -31,7 +32,7 @@ for (( i = 0; i < 10; i++ )); do
         < ~/prometheus-docker/submit.sh )
   else
     JOB_ID=$(qsub \
-        -q ondemand.q \
+        -q $QUEUE \
         -terse \
         -N node_ex_${JOB_ID} \
         -hold_jid $JOB_ID\
@@ -39,7 +40,7 @@ for (( i = 0; i < 10; i++ )); do
         -e $LOGDIR/prom-setup-${JOB_ID}-$(date +%F-%H%M).err \
         < ~/prometheus-docker/submit.sh )
     qsub \
-        -q ondemand.q \
+        -q $QUEUE \
         -terse \
         -N clean_${JOB_ID} \
         -hold_jid $JOB_ID\
