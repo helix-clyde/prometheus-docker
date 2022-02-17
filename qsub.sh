@@ -10,7 +10,7 @@ set -x
 #   -e /efs/home/clyde.jones/logs/prometheus-docker/submits-$(date +%F).err < ~/prometheus-docker/submit.sh
 
 LOGDIR=/efs/home/clyde.jones/logs/prometheus-docker
-QUEUE=rxlod.q
+QUEUE=ondemand.q
 
 mkdir -vp $LOGDIR/
 
