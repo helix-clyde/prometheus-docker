@@ -22,9 +22,14 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
     - targets: ['localhost:9090']
+  - job_name: 'jupyterhub'
+    static_configs:
+    - targets: ['jupyterhub-dev.research.helix.com']
+    metrics_path: 'hub/metrics'
+    scheme: 'https'
   - job_name: 'head'
     static_configs:
-    - targets: ['172.30.66.60:9100']
+    - targets: ['172.30.74.175:9100']
   - job_name: 'node'
     file_sd_configs:
       - files:
