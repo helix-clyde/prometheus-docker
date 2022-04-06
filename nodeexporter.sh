@@ -16,7 +16,7 @@ launch_container()
     --name ${CONTAINER_NAME} \
     --restart unless-stopped \
     --health-cmd='wget -q --spider http://localhost:9100/metrics' \
-    --health-interval=30s \
+    --health-interval=300s \
     --health-retries=3 \
     -p 9100:9100 \
     -d \
