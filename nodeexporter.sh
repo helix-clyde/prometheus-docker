@@ -4,7 +4,6 @@
 
 VERSION="v1.3.1"
 CONTAINER_NAME="node-exporter"
-# REPO="646323099789.dkr.ecr.us-east-1.amazonaws.com"
 REPO="quay.io/prometheus"
 
 RUNNING_VERSION=$(docker ps --format 'table {{.Image}}' -f name=${CONTAINER_NAME} \
@@ -25,9 +24,8 @@ launch_container()
     -v /efs/:/host/efs/:ro \
     ${REPO}/${CONTAINER_NAME}:${VERSION} \
       --path.rootfs=/host \
-      --collector.ntp \
       --collector.supervisord \
-      --log.level=error
+      --log.level=q
 }
 
 if [[ ${RUNNING_VERSION} != ${VERSION} ]]; then
