@@ -25,7 +25,7 @@ launch_container()
     ${REPO}/${CONTAINER_NAME}:${VERSION} \
       --path.rootfs=/host \
       --collector.supervisord \
-      --log.level=q
+      --log.level=error
 }
 
 if [[ ${RUNNING_VERSION} != ${VERSION} ]]; then
