@@ -28,12 +28,6 @@ launch_container()
       --log.level=error
 }
 
-if [[ ${RUNNING_VERSION} != ${VERSION} ]]; then
-  docker kill ${CONTAINER_NAME}
+  docker stop ${CONTAINER_NAME}
   docker rm ${CONTAINER_NAME}
   launch_container
-fi
-
-if [[ -z ${RUNNING_VERSION} ]]; then
-  launch_container
-fi
