@@ -50,3 +50,6 @@ for (( i = 0; i < 10; i++ )); do
   fi
   echo $JOB_ID
 done
+
+# End of file, if this is missing the file is truncated
+##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##

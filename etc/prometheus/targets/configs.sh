@@ -19,3 +19,6 @@ for node in $(cat $TARGET_DIR/*.yml \
          -o /dev/null \
     || mv -v $TARGET_DIR/${node}.yml $TARGET_DIR/old/${node}.yml.old
  done
+
+# End of file, if this is missing the file is truncated
+##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##

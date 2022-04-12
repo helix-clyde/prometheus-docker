@@ -31,3 +31,6 @@ launch_container()
   docker stop ${CONTAINER_NAME}
   docker rm ${CONTAINER_NAME}
   launch_container
+
+# End of file, if this is missing the file is truncated
+##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##

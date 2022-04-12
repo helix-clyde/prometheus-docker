@@ -7,3 +7,6 @@ ssh \
   localhost \
       "cd /efs/monitoring/prometheus/etc/targets/ \
     && sudo /efs/monitoring/prometheus/etc/targets/configs.sh"
+
+# End of file, if this is missing the file is truncated
+##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##

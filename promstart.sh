@@ -32,3 +32,6 @@ docker run \
             --storage.tsdb.retention.time=7d \
             --storage.tsdb.wal-compression \
             --web.enable-lifecycle
+
+# End of file, if this is missing the file is truncated
+##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##

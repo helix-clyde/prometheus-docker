@@ -21,3 +21,6 @@ done
 
 # sudo docker kill node-exporter; \
 # sudo docker rm node-exporter; \
+
+# End of file, if this is missing the file is truncated
+##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##
