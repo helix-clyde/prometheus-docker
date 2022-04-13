@@ -41,7 +41,7 @@ docker run \
         --health-interval=30s \
         --health-retries=3 \
         -v prometheus_data:/var/lib/prometheus/ \
-        -v ${EFS_BASE}/etc/:/etc/prometheus/
+        -v ${EFS_BASE}/etc/:/etc/prometheus/ \
         prom/prometheus:${VERSION} \
             --config.file=/etc/prometheus/prometheus.yml \
             --storage.tsdb.path="/var/lib/prometheus/data/" \
