@@ -15,11 +15,18 @@ mkdir -vp ${EFS_BASE}/etc/ \
 sudo chown -c 65534.65534 \
            ${PROM_BASE}/log/
 
-if [[ $(docker volume ls -q | grep -c prometheus_data) -eq 0 ]] ; then
-    docker volume create prometheus_data
-else
-    docker inspect prometheus_data
-fi
+docker volume create prometheus_data
+
+# fix permssions on data directory
+docker run \
+       --rm \
+       -it \
+       --name=promsetup \
+       -v prometheus_data:/var/lib/prometheus/ \
+   debian:buster-slim \
+   sh -c "mkdir -vp /var/lib/prometheus/data/ \
+        ; mkdir -vp /var/lib/prometheus/logs \
+        ; chown -cR 65534:65534 /var/lib/prometheus/"
 
 # change the configs to use the current node ip
 
@@ -33,9 +40,8 @@ docker run \
         --health-cmd='/bin/wget -q --spider http://localhost:9090/' \
         --health-interval=30s \
         --health-retries=3 \
-        -v prometheus_data:/var/lib/prometheus/data/ \
-        -v ${EFS_BASE}/etc/:/etc/prometheus/ \
-        -v ${PROM_BASE}/log/:/var/log/prometheus/ \
+        -v prometheus_data:/var/lib/prometheus/ \
+        -v ${EFS_BASE}/etc/:/etc/prometheus/
         quay.io/prometheus/prometheus:${VERSION} \
             --config.file=/etc/prometheus/prometheus.yml \
             --storage.tsdb.path="/var/lib/prometheus/data/" \
