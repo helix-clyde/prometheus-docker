@@ -42,7 +42,7 @@ docker run \
         --health-retries=3 \
         -v prometheus_data:/var/lib/prometheus/ \
         -v ${EFS_BASE}/etc/:/etc/prometheus/
-        quay.io/prometheus/prometheus:${VERSION} \
+        prom/prometheus:${VERSION} \
             --config.file=/etc/prometheus/prometheus.yml \
             --storage.tsdb.path="/var/lib/prometheus/data/" \
             --storage.tsdb.retention.size=5GB \
