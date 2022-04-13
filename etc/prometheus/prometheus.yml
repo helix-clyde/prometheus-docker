@@ -24,11 +24,11 @@ scrape_configs:
     - targets: ['localhost:9090']
   - job_name: 'jupyterhub'
     static_configs:
-    - targets: ['172.30.78.60:8000']
+    - targets: ['XXX.XXX.XXX.XXX:8000']
     metrics_path: 'hub/metrics'
   - job_name: 'head'
     static_configs:
-    - targets: ['172.30.78.60:9100']
+    - targets: ['XXX.XXX.XXX.XXX:9100']
   - job_name: 'node'
     file_sd_configs:
       - files:
