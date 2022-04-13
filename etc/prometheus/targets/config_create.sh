@@ -4,7 +4,7 @@
 set -x
 
 TARGET_DIR=/efs/monitoring/prometheus/etc/targets
-NODEIP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+NODEIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 
 if [[ ! -e $TARGET_DIR/${NODEIP}.yml ]]; then
   sudo /bin/cp -v $TARGET_DIR/node.yml.tmpl $TARGET_DIR/${NODEIP}.yml \
