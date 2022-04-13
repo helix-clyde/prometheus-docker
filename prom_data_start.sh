@@ -2,7 +2,7 @@
 
 [[ $DEBUG ]] && set -x
 
-NODEIP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+NODEIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 PROM_BASE="/opt/prometheus"
 EFS_BASE="/scratch/prometheus"
 PROM_VOL="prometheus_data"
@@ -25,12 +25,14 @@ docker run \
        -v prometheus_data:/var/lib/prometheus/ \
    debian:buster-slim \
    sh -c "mkdir -vp /var/lib/prometheus/data/ \
-        ; mkdir -vp /var/lib/prometheus/logs \
+        ; mkdir -vp /var/lib/prometheus/log \
         ; chown -cR 65534:65534 /var/lib/prometheus/"
 
 # change the configs to use the current node ip
 
-sed -i -e "s/XXX.XXX.XXX.XXX/${NODEIP}/" ${EFS_BASE}/etc/prometheus.yml
+cat etc/prometheus/prometheus.yml \
+| sed -e "s/XXX.XXX.XXX.XXX/${NODEIP}/" \
+| sudo tee ${EFS_BASE}/etc/prometheus.yml
 
 docker run \
         --name=prometheus \
