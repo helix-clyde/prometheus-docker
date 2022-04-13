@@ -9,13 +9,13 @@ PROM_VOL="prometheus_data"
 
 export VERSION="v2.34.0"
 
-mkdir -vp ${EFS_BASE}/etc/
+mkdir -vp ${EFS_BASE}/etc/ \
           ${PROM_BASE}/log/
 
 sudo chown -c 65534.65534 \
            ${PROM_BASE}/log/
 
-if [[ $(docker volume ls -q | grep -c prometheus_data) -eq 0 ]] ; then 
+if [[ $(docker volume ls -q | grep -c prometheus_data) -eq 0 ]] ; then
     docker volume create prometheus_data
 else
     docker inspect prometheus_data
