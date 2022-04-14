@@ -4,7 +4,7 @@
 
 VERSION="v1.3.1"
 CONTAINER_NAME="node-exporter"
-REPO="quay.io/prometheus"
+REPO="prom"
 
 RUNNING_VERSION=$(docker ps --format 'table {{.Image}}' -f name=${CONTAINER_NAME} \
                   | grep ${CONTAINER_NAME} \

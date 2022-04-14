@@ -51,6 +51,7 @@ docker run \
             --storage.tsdb.retention.size=2GB \
             --storage.tsdb.retention.time=14d \
             --storage.tsdb.wal-compression \
+            --log.level=error \
             --web.enable-lifecycle
 
 # End of file, if this is missing the file is truncated
