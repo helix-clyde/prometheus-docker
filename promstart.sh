@@ -2,7 +2,7 @@
 
 [[ $DEBUG ]] && set -x
 
-PROM_BASE="/opt/prometheus"
+PROM_BASE="/var/lib/prometheus"
 EFS_BASE="/efs/monitoring/prometheus"
 
 export VERSION="v2.34.0"
@@ -10,6 +10,7 @@ export VERSION="v2.34.0"
 mkdir -vp ${EFS_BASE}/etc/ \
           ${PROM_BASE}/data/ \
           ${PROM_BASE}/log/
+
 sudo chown -c 65534.65534 \
            ${PROM_BASE}/data/ \
            ${PROM_BASE}/log/
@@ -28,9 +29,10 @@ docker run \
         prom/prometheus:${VERSION} \
             --config.file=/etc/prometheus/prometheus.yml \
             --storage.tsdb.path="/var/lib/prometheus/data/" \
-            --storage.tsdb.retention.size=1GB \
-            --storage.tsdb.retention.time=7d \
+            --storage.tsdb.retention.size=2GB \
+            --storage.tsdb.retention.time=28d \
             --storage.tsdb.wal-compression \
+            --log.level=error \
             --web.enable-lifecycle
 
 # End of file, if this is missing the file is truncated
