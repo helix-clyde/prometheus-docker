@@ -24,7 +24,6 @@ launch_container()
     -v /efs/:/host/efs/:ro \
     ${REPO}/${CONTAINER_NAME}:${VERSION} \
       --path.rootfs=/host \
-      --collector.supervisord \
       --log.level=error
 }
 
