@@ -2,18 +2,24 @@
 
 [[ $DEBUG ]] && set -x
 
+NODEIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 PROM_BASE="/var/lib/prometheus"
 EFS_BASE="/efs/monitoring/prometheus"
 
-export VERSION="v2.34.0"
+export VERSION="v2.35.0"
 
 mkdir -vp ${EFS_BASE}/etc/ \
           ${PROM_BASE}/data/ \
           ${PROM_BASE}/log/
 
-sudo chown -c 65534.65534 \
-           ${PROM_BASE}/data/ \
-           ${PROM_BASE}/log/
+sudo chown -cR 65534.65534 \
+               ${PROM_BASE}
+
+# change the configs to use the current node ip
+
+cat etc/prometheus/prometheus.yml \
+| sed -e "s/X.X.X.X/${NODEIP}/" \
+| sudo tee ${EFS_BASE}/etc/prometheus.yml
 
 docker run \
         --name=prometheus \

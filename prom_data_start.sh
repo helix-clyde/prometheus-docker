@@ -7,15 +7,14 @@ PROM_BASE="/var/lib/prometheus"
 EFS_BASE="/efs/monitoring/prometheus"
 PROM_VOL="prometheus_data"
 
-export VERSION="v2.34.0"
+export VERSION="v2.35.0"
 
 mkdir -vp ${EFS_BASE}/etc/ \
           ${PROM_BASE}/data/ \
           ${PROM_BASE}/log/
 
-sudo chown -c 65534.65534 \
-           ${PROM_BASE}/data/ \
-           ${PROM_BASE}/log/
+sudo chown -cR 65534.65534 \
+               ${PROM_BASE}
 
 docker volume create prometheus_data
 
