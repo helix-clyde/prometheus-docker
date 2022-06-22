@@ -26,7 +26,7 @@ docker run \
         -d \
         --restart unless-stopped \
         -p 9090:9090 \
-        --health-cmd='/bin/wget -q --spider http://localhost:9090/' \
+        --health-cmd='/bin/wget -q --spider http://localhost:9090/-/ready' \
         --health-interval=30s \
         --health-retries=3 \
         -v ${PROM_BASE}/data/:/var/lib/prometheus/data/ \
@@ -38,7 +38,7 @@ docker run \
             --storage.tsdb.retention.size=2GB \
             --storage.tsdb.retention.time=28d \
             --storage.tsdb.wal-compression \
-            --log.level=error \
+            --web.enable-admin-api \
             --web.enable-lifecycle
 
 # End of file, if this is missing the file is truncated
