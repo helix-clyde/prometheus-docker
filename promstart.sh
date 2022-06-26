@@ -6,7 +6,7 @@ NODEIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 PROM_BASE="/var/lib/prometheus"
 EFS_BASE="/efs/monitoring/prometheus"
 
-export VERSION="v2.35.0"
+export VERSION="v2.36.0"
 
 mkdir -vp ${EFS_BASE}/etc/ \
           ${PROM_BASE}/data/ \
@@ -26,7 +26,7 @@ docker run \
         -d \
         --restart unless-stopped \
         -p 9090:9090 \
-        --health-cmd='/bin/wget -q --spider http://localhost:9090/-/ready' \
+        --health-cmd='/bin/wget -q --spider http://localhost:9090/-/healthy' \
         --health-interval=30s \
         --health-retries=3 \
         -v ${PROM_BASE}/data/:/var/lib/prometheus/data/ \
