@@ -17,7 +17,7 @@ sudo chown -cR 65534.65534 \
 
 # change the configs to use the current node ip
 
-cat ${EFS_BASE}/etc/prometheus/prometheus.yml.tmpl \
+cat ${EFS_BASE}/etc/prometheus.yml.tmpl \
 | sed -e "s/X.X.X.X/${NODEIP}/" \
 | sudo tee ${EFS_BASE}/etc/prometheus.yml
 
