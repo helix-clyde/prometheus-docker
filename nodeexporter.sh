@@ -27,9 +27,11 @@ launch_container()
       --log.level=error
 }
 
+if [[ $(docker ps --format 'table {{ .Names }}' --filter name="${CONTAINER_NAME}"| grep -v NAMES) == "${CONTAINER_NAME}" ]] ; then
   docker stop ${CONTAINER_NAME}
   docker rm ${CONTAINER_NAME}
-  launch_container
+fi
+launch_container
 
 # End of file, if this is missing the file is truncated
 ##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##

@@ -16,7 +16,7 @@ for (( i = 0; i < 47; i++ )); do
          " sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
          ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh "
   done
-  sleep 1h
+  sleep 20m
 done
 
 # sudo docker kill node-exporter; \
