@@ -18,6 +18,8 @@ launch_container()
     --health-cmd='wget -q --spider http://localhost:9100/metrics' \
     --health-interval=300s \
     --health-retries=3 \
+    --log-driver local \
+    --log-opt max-size=1m \
     -p 9100:9100 \
     -d \
     -v /:/host:ro \
