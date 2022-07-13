@@ -24,9 +24,11 @@ cat ${EFS_BASE}/etc/prometheus.yml.tmpl \
 docker run \
         --name=prometheus \
         -d \
+        --log-driver local \
+        --log-opt max-size=1m \
         --restart unless-stopped \
         -p 9090:9090 \
-        --health-cmd='/bin/wget -q --spider http://localhost:9090/-/healthy' \
+        --health-cmd='/bin/wget -q --spider http://localhost:9090/-/ready' \
         --health-interval=30s \
         --health-retries=3 \
         -v ${PROM_BASE}/data/:/var/lib/prometheus/data/ \
