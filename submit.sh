@@ -14,13 +14,11 @@ for (( i = 0; i < 47; i++ )); do
         -o ConnectTimeout=1 \
         $host \
          " sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
-         ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh "
+         ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh \
+         ; ~clyde.jones/prometheus-docker/cleanup.sh "
   done
   sleep 20m
 done
-
-# sudo docker kill node-exporter; \
-# sudo docker rm node-exporter; \
 
 # End of file, if this is missing the file is truncated
 ##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##=-=##
