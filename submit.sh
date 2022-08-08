@@ -15,6 +15,7 @@ for (( i = 0; i < 47; i++ )); do
         $host \
          " sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
          ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh \
+         ; sleep 45 \
          ; ~clyde.jones/prometheus-docker/cleanup.sh "
   done
   sleep 20m
