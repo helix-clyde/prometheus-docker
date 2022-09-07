@@ -8,16 +8,25 @@ User=root
 Restart=on-failure
 
 ExecStart=docker run \
-                  --name=prometheus \
-                  -it \
-                  --restart unless-stopped \
-                  -p 9090:9090 \
-                  -v /opt/prometheus/data/:/var/lib/prometheus/data/ \
-                  -v /opt/prometheus/etc/:/etc/prometheus/ \
-                  -v /opt/prometheus/log/:/var/log/prometheus/ \
-                  quay.io/prometheus/prometheus:v2.30.3 \
-                      --config.file=/etc/prometheus/prometheus.yml \
-                      --storage.tsdb.path="/var/lib/prometheus/data/"
+            --name=prometheus \
+            -it \
+            --restart unless-stopped \
+            --health-cmd='/bin/wget -q --spider http://localhost:9090/-/healthy' \
+            --health-interval=30s \
+            --health-retries=3 \
+            -p 9090:9090 \
+            -v /opt/prometheus/data/:/var/lib/prometheus/data/ \
+            -v /opt/prometheus/etc/:/etc/prometheus/ \
+            -v /opt/prometheus/log/:/var/log/prometheus/ \
+            prom/prometheus:v2.38.0 \
+            --config.file=/etc/prometheus/prometheus.yml \
+            --storage.tsdb.path="/var/lib/prometheus/data/" \
+            --storage.tsdb.retention.size=5GB \
+            --storage.tsdb.retention.time=28d \
+            --storage.tsdb.wal-compression \
+            --web.enable-admin-api \
+            --web.enable-lifecycle
+
 
 [Install]
 WantedBy=multi-user.target

@@ -7,7 +7,7 @@ PROM_BASE="/var/lib/prometheus"
 EFS_BASE="/efs/monitoring/prometheus"
 PROM_VOL="prometheus_data"
 
-export VERSION="v2.36.0"
+export VERSION="v2.38.0"
 
 mkdir -vp ${EFS_BASE}/etc/ \
           ${PROM_BASE}/data/ \
