@@ -6,7 +6,7 @@ VERSION="v1.3.1"
 CONTAINER_NAME="node-exporter"
 REPO="prom"
 
-RUNNING_VERSION=$(docker ps --format 'table {{.Image}}' -f name=${CONTAINER_NAME} \
+RUNNING_VERSION=$(docker ps --format '{{.Image}}' -f name=${CONTAINER_NAME} \
                   | grep ${CONTAINER_NAME} \
                   | cut -d : -f 2)
 
@@ -29,10 +29,10 @@ launch_container()
       --log.level=error
 }
 
-if [[ $(docker ps --format 'table {{ .Names }}' --filter name="${CONTAINER_NAME}"| grep -v NAMES) == "${CONTAINER_NAME}" ]] ; then
-  docker stop ${CONTAINER_NAME}
-  docker rm ${CONTAINER_NAME}
-fi
+# if [[ $(docker ps --format '{{ .Names }}' --filter name="${CONTAINER_NAME}") == "${CONTAINER_NAME}" ]] ; then
+#   docker stop ${CONTAINER_NAME}
+#   docker rm ${CONTAINER_NAME}
+# fi
 launch_container
 
 # End of file, if this is missing the file is truncated
