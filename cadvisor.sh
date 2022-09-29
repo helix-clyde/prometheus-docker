@@ -22,17 +22,17 @@ launch_container()
     --health-interval=300s \
     --health-retries=3 \
     --volume=/:/rootfs:ro \
-    --volume=/var/run:/var/run:ro \
-    --volume=/sys:/sys:ro \
-    --volume=/var/lib/docker/:/var/lib/docker:ro \
     --volume=/dev/disk/:/dev/disk:ro \
+    --volume=/var/lib/docker/:/var/lib/docker:ro \
+    --volume=/var/run:/var/run:ro \
     --detach=true \
     --device=/dev/kmsg \
     --log-driver local \
     --log-opt max-size=1m \
-    ${REPO}/${CONTAINER_NAME}:${VERSION}
+    ${REPO}/${CONTAINER_NAME}:${VERSION} \
+      --disable_root_cgroup_stats=false
 
-
+    # --volume=/sys:/sys:ro \
 }
 
 if [[ $(docker ps --format '{{ .Names }}' --filter name="${CONTAINER_NAME}") == "${CONTAINER_NAME}" ]] ; then
