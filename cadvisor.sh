@@ -28,14 +28,18 @@ launch_container()
     --volume=/dev/disk/:/dev/disk:ro \
     --detach=true \
     --device=/dev/kmsg \
+    --log-driver local \
+    --log-opt max-size=1m \
     ${REPO}/${CONTAINER_NAME}:${VERSION}
+
+
 }
 
 if [[ $(docker ps --format '{{ .Names }}' --filter name="${CONTAINER_NAME}") == "${CONTAINER_NAME}" ]] ; then
 #   docker stop ${CONTAINER_NAME}
 #   docker rm ${CONTAINER_NAME}
     echo "${CONTAINER_NAME} is running"
-else 
+else
    launch_container
 fi
 
