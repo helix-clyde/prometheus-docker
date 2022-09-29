@@ -2,9 +2,9 @@
 
 [[ $DEBUG ]] && set -x
 
-VERSION="v1.3.1"
-CONTAINER_NAME="node-exporter"
-REPO="prom"
+VERSION="v0.45.0"
+CONTAINER_NAME="cadvisor"
+REPO="gcr.io/cadvisor"
 
 RUNNING_VERSION=$(docker ps --format '{{.Image}}' -f name=${CONTAINER_NAME} \
                   | grep ${CONTAINER_NAME} \
@@ -14,20 +14,21 @@ launch_container()
 {
   docker run \
     --name ${CONTAINER_NAME} \
+    --privileged \
     -e TZ=PST8PDT \
+    --publish=9343:8080 \
     --restart unless-stopped \
-    --health-cmd='wget -q --spider http://localhost:9100/metrics' \
+    --health-cmd='/bin/wget -q --spider http://localhost:8080/metrics' \
     --health-interval=300s \
     --health-retries=3 \
-    --log-driver local \
-    --log-opt max-size=1m \
-    -p 9100:9100 \
-    -d \
-    -v /:/host:ro \
-    -v /efs/:/host/efs/:ro \
-    ${REPO}/${CONTAINER_NAME}:${VERSION} \
-      --path.rootfs=/host \
-      --log.level=error
+    --volume=/:/rootfs:ro \
+    --volume=/var/run:/var/run:ro \
+    --volume=/sys:/sys:ro \
+    --volume=/var/lib/docker/:/var/lib/docker:ro \
+    --volume=/dev/disk/:/dev/disk:ro \
+    --detach=true \
+    --device=/dev/kmsg \
+    ${REPO}/${CONTAINER_NAME}:${VERSION}
 }
 
 if [[ $(docker ps --format '{{ .Names }}' --filter name="${CONTAINER_NAME}") == "${CONTAINER_NAME}" ]] ; then
