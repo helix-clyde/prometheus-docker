@@ -30,9 +30,7 @@ launch_container()
       --log.level=error
 }
 
-if [[ $(docker ps --format '{{ .Names }}' --filter name="${CONTAINER_NAME}") == "${CONTAINER_NAME}" ]] ; then
-#   docker stop ${CONTAINER_NAME}
-#   docker rm ${CONTAINER_NAME}
+if [[ $(docker ps --format '{{ .Names }}' | egrep -c "PrometheusAgent|${CONTAINER_NAME}") -gt 0 ]] ; then
     echo "${CONTAINER_NAME} is running"
 else 
    launch_container
