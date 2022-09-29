@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -x
+
+[[ $DEBUG ]] && set -x
 
 LOGDIR=~/logs/prometheus-docker/
 
@@ -13,10 +14,9 @@ for (( i = 0; i < 47; i++ )); do
         -o UserKnownHostsFile=/dev/null \
         -o ConnectTimeout=1 \
         $host \
-         " sudo ~clyde.jones/prometheus-docker/nodeexporter.sh \
-         ; ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh \
-         ; sleep 45 \
-         ; ~clyde.jones/prometheus-docker/cleanup.sh "
+         " ~clyde.jones/prometheus-docker/nodeexporter.sh \
+         ; ~clyde.jones/prometheus-docker/cadvisor.sh \
+         ; sudo ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh "
   done
   sleep 20m
 done

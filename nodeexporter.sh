@@ -32,7 +32,7 @@ launch_container()
 
 if [[ $(docker ps --format '{{ .Names }}' | egrep -c "PrometheusAgent|${CONTAINER_NAME}") -gt 0 ]] ; then
     echo "${CONTAINER_NAME} is running"
-else 
+else
    launch_container
 fi
 
