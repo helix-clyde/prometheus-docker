@@ -15,7 +15,6 @@ for (( i = 0; i < 47; i++ )); do
         -o ConnectTimeout=1 \
         $host \
          " ~clyde.jones/prometheus-docker/nodeexporter.sh \
-         ; ~clyde.jones/prometheus-docker/cadvisor.sh \
          ; sudo ~clyde.jones/prometheus-docker/etc/prometheus/targets/config_create.sh "
   done
   sleep 20m
