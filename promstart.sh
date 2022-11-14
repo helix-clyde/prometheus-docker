@@ -6,7 +6,7 @@ NODEIP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 PROM_BASE="/var/lib/prometheus"
 EFS_BASE="/efs/monitoring/prometheus"
 
-export VERSION="v2.39.1"
+export VERSION="v2.37.0"
 
 mkdir -vp ${EFS_BASE}/etc/ \
           ${PROM_BASE}/data/ \
