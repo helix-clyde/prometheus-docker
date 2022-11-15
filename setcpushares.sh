@@ -2,7 +2,6 @@
 
 [[ $DEBUG ]] && set -x
 # for container in  $(docker ps --format 'table {{ .Names }}' | grep Prometheus ) ; do docker update --cpu-shares "256" $container ; done
-
 # docker update --cpu-shares "1024" ecs-hcluster-production-master-16-MasterTask-f6dd9ca5c0b0cfb51600
 # docker update --cpu-shares "1024" ecs-hcluster-production-notebook-18-NotebookTask-c6bd95d385dfef99c801
 # docker update --cpu-shares "512" ecs-hcluster-production-scale-out-ondemand-16-ScaleOutOndemandTask-f691d1bfbed6e49a6500
@@ -20,30 +19,53 @@
 # docker update --cpu-shares "256" ecs-hcluster-production-prometheus-agent-1-PrometheusAgent-a48fead2b3a1f486a001
 # docker update --cpu-shares "128" ecs-hcluster-production-cron-16-CronTask-cc92d09bf9eb87ee1300
 
-for container in $(docker ps --format 'table {{ .Names }}' | egrep "Prometheus|grafana|Influx" ) ;
+
+CPU_SHARE=$(( $(grep -c processor /proc/cpuinfo) * 1024 ))
+
+MAIN_SHARE=$(( CPU_SHARE / 8 ))
+MON_SHARE=$(( CPU_SHARE / 22 ))
+SCALE_OUT_SHARE=$(( CPU_SHARE / 22 ))
+CRON_SHARE=$(( CPU_SHARE / 32 ))
+
+ALLOCATED_SHARE=0
+
+for container in $(docker ps --format 'table {{ .Names }}' | grep -E "Prometheus|grafana|Influx" ) ;
 do
- docker update --cpu-shares "384" $container
+ [[ $DEBUG ]] || docker update --cpu-shares $MON_SHARE "$container"
+ [[ $DEBUG ]] && echo $CPU_SHARE $MON_SHARE "$container"
+ ALLOCATED_SHARE=$(( ALLOCATED_SHARE + MON_SHARE ))
+ echo $ALLOCATED_SHARE spent
 done
 
-for container in $(docker ps --format 'table {{ .Names }}' | egrep "MasterTask|NotebookTask" ) ;
+for container in $(docker ps --format 'table {{ .Names }}' | grep -E "MasterTask|NotebookTask" ) ;
 do
- docker update --cpu-shares "1024" $container
+ [[ $DEBUG ]] || docker update --cpu-shares "$MAIN_SHARE" "$container"
+ [[ $DEBUG ]] && echo $CPU_SHARE $MAIN_SHARE "$container"
+ ALLOCATED_SHARE=$(( ALLOCATED_SHARE + MAIN_SHARE ))
+ echo $ALLOCATED_SHARE spent
 done
 
-for container in $(docker ps --format 'table {{ .Names }}' | egrep "ScaleOut" ) ;
+for container in $(docker ps --format 'table {{ .Names }}' | grep -E "ScaleOut|ScaleIn" ) ;
 do
- docker update --cpu-shares "384" $container
+ [[ $DEBUG ]] || docker update --cpu-shares "$SCALE_OUT_SHARE" "$container"
+ [[ $DEBUG ]] && echo $CPU_SHARE "$SCALE_OUT_SHARE" "$container"
+ ALLOCATED_SHARE=$(( ALLOCATED_SHARE + SCALE_OUT_SHARE ))
+ echo $ALLOCATED_SHARE spent
 done
 
-for container in $(docker ps --format 'table {{ .Names }}' | egrep "CronTask" ) ;
+for container in $(docker ps --format 'table {{ .Names }}' | grep -E "CronTask" ) ;
 do
- docker update --cpu-shares "128" $container
+ [[ $DEBUG ]] || docker update --cpu-shares "128" "$container"
+ [[ $DEBUG ]] && echo $CPU_SHARE "$CRON_SHARE" "$container"
+ ALLOCATED_SHARE=$(( ALLOCATED_SHARE + CRON_SHARE ))
+ echo $ALLOCATED_SHARE spent
 done
 
+echo "-------------------------"
 for container in $(docker ps --format '{{ .Names }}');
 do
-   echo -en $container 
-   docker inspect $container | grep -i cpushares | tr -s ' \",:' '\t'
+   echo -en "$container" 
+   docker inspect "$container" | grep CpuShares | tr -s ' \",:' '\t'
 done \
 | pr -t -e30 -
 
