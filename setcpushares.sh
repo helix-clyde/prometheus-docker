@@ -34,7 +34,7 @@ do
  [[ $DEBUG ]] || docker update --cpu-shares $MON_SHARE "$container"
  [[ $DEBUG ]] && echo $CPU_SHARE $MON_SHARE "$container"
  ALLOCATED_SHARE=$(( ALLOCATED_SHARE + MON_SHARE ))
- echo $ALLOCATED_SHARE spent
+ echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
 for container in $(docker ps --format 'table {{ .Names }}' | grep -E "MasterTask|NotebookTask" ) ;
@@ -42,7 +42,7 @@ do
  [[ $DEBUG ]] || docker update --cpu-shares "$MAIN_SHARE" "$container"
  [[ $DEBUG ]] && echo $CPU_SHARE $MAIN_SHARE "$container"
  ALLOCATED_SHARE=$(( ALLOCATED_SHARE + MAIN_SHARE ))
- echo $ALLOCATED_SHARE spent
+ echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
 for container in $(docker ps --format 'table {{ .Names }}' | grep -E "ScaleOut|ScaleIn" ) ;
@@ -50,7 +50,7 @@ do
  [[ $DEBUG ]] || docker update --cpu-shares "$SCALE_OUT_SHARE" "$container"
  [[ $DEBUG ]] && echo $CPU_SHARE "$SCALE_OUT_SHARE" "$container"
  ALLOCATED_SHARE=$(( ALLOCATED_SHARE + SCALE_OUT_SHARE ))
- echo $ALLOCATED_SHARE spent
+ echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
 for container in $(docker ps --format 'table {{ .Names }}' | grep -E "CronTask" ) ;
@@ -58,7 +58,7 @@ do
  [[ $DEBUG ]] || docker update --cpu-shares "128" "$container"
  [[ $DEBUG ]] && echo $CPU_SHARE "$CRON_SHARE" "$container"
  ALLOCATED_SHARE=$(( ALLOCATED_SHARE + CRON_SHARE ))
- echo $ALLOCATED_SHARE spent
+ echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
 echo "-------------------------"
