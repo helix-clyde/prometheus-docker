@@ -19,17 +19,16 @@
 # docker update --cpu-shares "256" ecs-hcluster-production-prometheus-agent-1-PrometheusAgent-a48fead2b3a1f486a001
 # docker update --cpu-shares "128" ecs-hcluster-production-cron-16-CronTask-cc92d09bf9eb87ee1300
 
-
 CPU_SHARE=$(( $(grep -c processor /proc/cpuinfo) * 1024 ))
 
 MAIN_SHARE=$(( CPU_SHARE / 8 ))
-MON_SHARE=$(( CPU_SHARE / 22 ))
-SCALE_OUT_SHARE=$(( CPU_SHARE / 22 ))
+MON_SHARE=$(( CPU_SHARE / 20 ))
+SCALE_OUT_SHARE=$(( CPU_SHARE / 21 ))
 CRON_SHARE=$(( CPU_SHARE / 32 ))
 
 ALLOCATED_SHARE=0
 
-for container in $(docker ps --format 'table {{ .Names }}' | grep -E "Prometheus|grafana|Influx" ) ;
+for container in $(docker ps --format '{{ .Names }}' | grep -E "Prometheus|grafana|Influx" ) ;
 do
  [[ $DEBUG ]] || docker update --cpu-shares $MON_SHARE "$container"
  [[ $DEBUG ]] && echo $CPU_SHARE $MON_SHARE "$container"
@@ -37,7 +36,7 @@ do
  echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
-for container in $(docker ps --format 'table {{ .Names }}' | grep -E "MasterTask|NotebookTask" ) ;
+for container in $(docker ps --format '{{ .Names }}' | grep -E "MasterTask|NotebookTask" ) ;
 do
  [[ $DEBUG ]] || docker update --cpu-shares "$MAIN_SHARE" "$container"
  [[ $DEBUG ]] && echo $CPU_SHARE $MAIN_SHARE "$container"
@@ -45,7 +44,7 @@ do
  echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
-for container in $(docker ps --format 'table {{ .Names }}' | grep -E "ScaleOut|ScaleIn" ) ;
+for container in $(docker ps --format '{{ .Names }}' | grep -E "ScaleOut|ScaleIn" ) ;
 do
  [[ $DEBUG ]] || docker update --cpu-shares "$SCALE_OUT_SHARE" "$container"
  [[ $DEBUG ]] && echo $CPU_SHARE "$SCALE_OUT_SHARE" "$container"
@@ -53,11 +52,19 @@ do
  echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
-for container in $(docker ps --format 'table {{ .Names }}' | grep -E "CronTask" ) ;
+for container in $(docker ps --format '{{ .Names }}' | grep -E "CronTask" ) ;
 do
  [[ $DEBUG ]] || docker update --cpu-shares "128" "$container"
  [[ $DEBUG ]] && echo $CPU_SHARE "$CRON_SHARE" "$container"
  ALLOCATED_SHARE=$(( ALLOCATED_SHARE + CRON_SHARE ))
+ echo $ALLOCATED_SHARE spent of $CPU_SHARE
+done
+
+for container in $(docker ps --format '{{ .ID }}\t{{ .Image }}' | grep -E "hcluster2-notebook:client" | cut -f 1 ) ;
+do
+ [[ $DEBUG ]] || docker update --cpu-shares "$MON_SHARE" "$container"
+ [[ $DEBUG ]] && echo $CPU_SHARE "$MON_SHARE" "$container"
+ ALLOCATED_SHARE=$(( ALLOCATED_SHARE + MON_SHARE ))
  echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
@@ -67,5 +74,8 @@ do
    echo -en "$container" 
    docker inspect "$container" | grep CpuShares | tr -s ' \",:' '\t'
 done \
+| /efs/home/clyde.jones/.local/bin/datamash -g 1 sum 3 \
 | pr -t -e30 -
+# for container in $(docker ps --format '{{ .Names }}'); do    echo -en "$container" ;    docker inspect "$container" | grep CpuShares | tr -s ' \",:' '\t'; done | datamash -g 1 sum 3 | pr -t -e29 -
+
 
