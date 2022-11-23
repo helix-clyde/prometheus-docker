@@ -22,6 +22,7 @@
 CPU_SHARE=$(( $(grep -c processor /proc/cpuinfo) * 1024 ))
 
 MAIN_SHARE=$(( CPU_SHARE / 8 ))
+CLIENT_SHARE=$(( CPU_SHARE / 16 ))
 MON_SHARE=$(( CPU_SHARE / 20 ))
 SCALE_OUT_SHARE=$(( CPU_SHARE / 21 ))
 CRON_SHARE=$(( CPU_SHARE / 32 ))
@@ -44,7 +45,7 @@ do
  echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
-for container in $(docker ps --format '{{ .Names }}' | grep -E "ScaleOut|ScaleIn" ) ;
+for container in $(docker ps --format '{{ .Names }}' | grep -E "ScaleOut|ScaleIn|ge-exec" ) ;
 do
  [[ $DEBUG ]] || docker update --cpu-shares "$SCALE_OUT_SHARE" "$container"
  [[ $DEBUG ]] && echo $CPU_SHARE "$SCALE_OUT_SHARE" "$container"
@@ -62,9 +63,9 @@ done
 
 for container in $(docker ps --format '{{ .ID }}\t{{ .Image }}' | grep -E "hcluster2-notebook:client" | cut -f 1 ) ;
 do
- [[ $DEBUG ]] || docker update --cpu-shares "$MON_SHARE" "$container"
- [[ $DEBUG ]] && echo $CPU_SHARE "$MON_SHARE" "$container"
- ALLOCATED_SHARE=$(( ALLOCATED_SHARE + MON_SHARE ))
+ [[ $DEBUG ]] || docker update --cpu-shares "$CLIENT_SHARE" "$container"
+ [[ $DEBUG ]] && echo $CPU_SHARE "$CLIENT_SHARE" "$container"
+ ALLOCATED_SHARE=$(( ALLOCATED_SHARE + CLIENT_SHARE ))
  echo $ALLOCATED_SHARE spent of $CPU_SHARE
 done
 
