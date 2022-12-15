@@ -11,6 +11,7 @@ ExecStart= docker run \
                   --name=node-exporter \
                   -d \
                   --rm \
+                  --cpu-shares 256 \
                   -p 9100:9100 \
                   --health-cmd='wget -q --spider http://localhost:9100/metrics' \
                   --health-interval=300s \
@@ -20,7 +21,7 @@ ExecStart= docker run \
                   -v "/proc:/host/proc:ro" \
                   -v "/sys:/host/sys:ro" \
                   -v "/:/rootfs:ro" \
-                  prom/node-exporter:v1.3.1 \
+                  prom/node-exporter:v1.5.0 \
                       --path.rootfs=/host
 [Install]
 WantedBy=multi-user.target

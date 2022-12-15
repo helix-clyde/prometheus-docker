@@ -2,13 +2,13 @@
 
 [[ $DEBUG ]] && set -x
 
-VERSION="v1.4.0"
+VERSION="v1.5.0"
 CONTAINER_NAME="node-exporter"
 REPO="prom"
 
-RUNNING_VERSION=$(docker ps --format '{{.Image}}' -f name=${CONTAINER_NAME} \
-                  | grep ${CONTAINER_NAME} \
-                  | cut -d : -f 2)
+# RUNNING_VERSION=$(docker ps --format '{{.Image}}' -f name=${CONTAINER_NAME} \
+#                   | grep ${CONTAINER_NAME} \
+#                   | cut -d : -f 2)
 
 launch_container()
 {
@@ -30,7 +30,7 @@ launch_container()
       --log.level=error
 }
 
-if [[ $(docker ps --format '{{ .Names }}' | egrep -c "PrometheusAgent|${CONTAINER_NAME}") -gt 0 ]] ; then
+if [[ $(docker ps --format '{{ .Names }}' | grep -E -c "PrometheusAgent|${CONTAINER_NAME}") -gt 0 ]] ; then
     echo "${CONTAINER_NAME} is running"
 else
    launch_container

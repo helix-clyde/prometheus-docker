@@ -12,7 +12,7 @@ if [[ -e "$CONF_DIR/prometheus.yml.tmpl" ]]; then
          sudo /bin/cp -v "$CONF_DIR/prometheus.yml.tmpl" "$CONF_DIR/prometheus.yml" \
       && sudo sed -i -e "s/X.X.X.X/$NODEIP/" "$CONF_DIR/prometheus.yml"
 else
-  exit 404
+  exit 44
 fi
 
 # setup data directory ensure the variable is set!!

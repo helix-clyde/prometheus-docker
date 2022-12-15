@@ -18,7 +18,7 @@ ExecStart=docker run \
             -v /opt/prometheus/data/:/var/lib/prometheus/data/ \
             -v /opt/prometheus/etc/:/etc/prometheus/ \
             -v /opt/prometheus/log/:/var/log/prometheus/ \
-            prom/prometheus:v2.38.0 \
+            prom/prometheus:v2.37.5 \
             --config.file=/etc/prometheus/prometheus.yml \
             --storage.tsdb.path="/var/lib/prometheus/data/" \
             --storage.tsdb.retention.size=5GB \
