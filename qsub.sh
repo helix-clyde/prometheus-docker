@@ -27,8 +27,8 @@ for (( i = 0; i < 10; i++ )); do
         -q $QUEUE \
         -terse \
         -N node_ex \
+        -j y \
         -o $LOGDIR/prom-setup-$(date +%F-%H%M).out \
-        -e $LOGDIR/prom-setup-$(date +%F-%H%M).err \
         < ~/prometheus-docker/submit.sh )
   else
     JOB_ID=$(qsub \
@@ -36,16 +36,16 @@ for (( i = 0; i < 10; i++ )); do
         -terse \
         -N node_ex_${JOB_ID} \
         -hold_jid $JOB_ID\
+        -j y \
         -o $LOGDIR/prom-setup-${JOB_ID}-$(date +%F-%H%M).out \
-        -e $LOGDIR/prom-setup-${JOB_ID}-$(date +%F-%H%M).err \
         < ~/prometheus-docker/submit.sh )
     qsub \
         -q $QUEUE \
         -terse \
         -N clean_${JOB_ID} \
         -hold_jid $JOB_ID\
+        -j y \
         -o $LOGDIR/clean-${JOB_ID}-$(date +%F-%H%M).out \
-        -e $LOGDIR/clean-${JOB_ID}-$(date +%F-%H%M).err \
         < ~/prometheus-docker/cleanup.sh
   fi
   echo $JOB_ID
