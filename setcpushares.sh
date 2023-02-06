@@ -22,8 +22,8 @@
 CPU_SHARE=$(( $(grep -c processor /proc/cpuinfo) * 1024 ))
 
 MAIN_SHARE=$(( CPU_SHARE / 8 ))
-CLIENT_SHARE=$(( CPU_SHARE / 16 ))
-MON_SHARE=$(( CPU_SHARE / 20 ))
+CLIENT_SHARE=$(( CPU_SHARE / 21 ))
+MON_SHARE=$(( CPU_SHARE / 21 ))
 SCALE_OUT_SHARE=$(( CPU_SHARE / 21 ))
 CRON_SHARE=$(( CPU_SHARE / 32 ))
 
