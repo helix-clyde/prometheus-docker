@@ -29,6 +29,18 @@ CRON_SHARE=$(( CPU_SHARE / 32 ))
 
 ALLOCATED_SHARE=0
 
+echo "-------------------------"
+
+for container in $(docker ps --format '{{ .Names }}');
+do
+   echo -en "$container"
+   docker inspect "$container" | grep CpuShares | tr -s ' \",:' '\t'
+done \
+| /efs/home/clyde.jones/.local/bin/datamash -g 1 sum 3 \
+| pr -t -e30 -
+
+echo "-------------------------"
+
 for container in $(docker ps --format '{{ .Names }}' | grep -E "Prometheus|grafana|Influx" ) ;
 do
  [[ $DEBUG ]] || docker update --cpu-shares $MON_SHARE "$container"
