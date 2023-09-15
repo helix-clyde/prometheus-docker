@@ -84,7 +84,7 @@ done
 echo "-------------------------"
 for container in $(docker ps --format '{{ .Names }}');
 do
-   echo -en "$container" 
+   echo -en "$container"
    docker inspect "$container" | grep CpuShares | tr -s ' \",:' '\t'
 done \
 | /efs/home/clyde.jones/.local/bin/datamash -g 1 sum 3 \

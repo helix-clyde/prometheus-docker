@@ -2,7 +2,7 @@
 
 [[ $DEBUG ]] && set -x
 
-VERSION="v1.5.0"
+VERSION="v1.6.1"
 CONTAINER_NAME="node-exporter"
 REPO="prom"
 
